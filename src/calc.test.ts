@@ -20,14 +20,11 @@ describe("Brick", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
     const aa = createBrick("a", "5.2.1");
-    const list = [a, b, aa];
 
     const catalogBuilder = new CatalogBuilder();
 
     catalogBuilder.add(a).add(b).add(aa);
 
-    const uniqueList = new Set(list);
-
-    expect(catalogBuilder.build()).toEqual(uniqueList);
+    expect(catalogBuilder.build()).toEqual([a, b]);
   });
 });

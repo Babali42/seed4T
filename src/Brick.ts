@@ -14,14 +14,17 @@ export function createBrick(name: string, version: Version): Brick {
 }
 
 export class CatalogBuilder {
-  private bricks: Set<Brick> = new Set();
+  private bricks: Brick[] = [];
 
   add(brick: Brick): CatalogBuilder {
-    this.bricks.add(brick);
+    if (this.bricks.some((b) => b.name === brick.name)) {
+      return this;
+    }
+    this.bricks.push(brick);
     return this;
   }
 
-  build(): Set<Brick> {
+  build(): Brick[] {
     return this.bricks;
   }
 }
