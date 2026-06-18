@@ -5,3 +5,10 @@ export interface Brick {
   version: Version;
   // url: string;
 }
+
+export function createBrick(name: string, version: Version): Brick {
+  return {
+    name,
+    version,
+  }
+}
