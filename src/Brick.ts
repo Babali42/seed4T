@@ -13,29 +13,57 @@ export function createBrick(name: string, version: Version): Brick {
   };
 }
 
-export class CatalogBuilder {
-  private bricks: Brick[] = [];
+export class CatalogBrick {
+  constructor(
+    public brick: Brick,
+    public dependant: Brick | null,
+  ) {}
+}
 
-  add(brick: Brick): CatalogBuilder {
-    if (this.bricks.some((b) => b.name === brick.name)) {
+export class CatalogBuilder {
+  private bricks: CatalogBrick[] = [];
+
+  add(brickToAdd: Brick): CatalogBuilder {
+    if (this.bricks.some((b) => b.brick.name === brickToAdd.name)) {
       return this;
     }
-    this.bricks.push(brick);
+    this.bricks.push(new CatalogBrick(brickToAdd, null));
     return this;
   }
 
-  build(): Brick[] {
+  build(): CatalogBrick[] {
     return this.bricks;
+  }
+
+  addBrickWithDependencies(
+    brickToAdd: Brick,
+    dependant: Brick,
+  ): CatalogBuilder {
+    this.bricks.push(new CatalogBrick(brickToAdd, dependant));
+    return this;
   }
 }
 
 export class Cart {
   bricks: Brick[] = [];
-  add(a: Brick) {
-    this.bricks.push(a);
+
+  constructor(private catalog: CatalogBrick[] = []) {}
+
+  add(brickName: string) {
+    const brickCatalog = this.catalog.find((b) => b.brick.name === brickName);
+
+    if (!brickCatalog) {
+      return;
+    }
+
+    this.bricks.push(brickCatalog.brick);
+
+    if (brickCatalog.dependant) {
+      this.bricks.push(brickCatalog.dependant);
+    }
   }
 
-  remove(b: Brick) {
-    this.bricks = this.bricks.filter(x => x.name !== b.name);
+  remove(brickName: string) {
+    this.bricks = this.bricks.filter((x) => x.name !== brickName);
   }
 }
