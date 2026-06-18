@@ -28,3 +28,14 @@ export class CatalogBuilder {
     return this.bricks;
   }
 }
+
+export class Cart {
+  bricks: Brick[] = [];
+  add(a: Brick) {
+    this.bricks.push(a);
+  }
+
+  remove(b: Brick) {
+    this.bricks = this.bricks.filter(x => x.name !== b.name);
+  }
+}

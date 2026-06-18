@@ -1,4 +1,4 @@
-import { Brick, createBrick, CatalogBuilder } from "./Brick";
+import {Brick, createBrick, CatalogBuilder, Cart} from "./Brick";
 
 describe("Brick", () => {
   it("Should create a Brick", () => {
@@ -26,5 +26,27 @@ describe("Brick", () => {
     catalogBuilder.add(a).add(b).add(aa);
 
     expect(catalogBuilder.build()).toEqual([a, b]);
+  });
+
+  it("should allow user to add brick", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+
+    const cart = new Cart();
+    cart.add(a);
+
+    expect(cart.bricks).toEqual([a]);
+  });
+
+  it("should allow user to add and remove brick", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+
+    const cart = new Cart();
+    cart.add(a);
+    cart.add(b);
+    cart.remove(b);
+
+    expect(cart.bricks).toEqual([a]);
   });
 });
